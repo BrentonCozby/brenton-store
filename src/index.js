@@ -1,21 +1,32 @@
 import cloneDeep from 'lodash.cloneDeep'
 
-const createStore = function ({ initialState }) {
+const createStore = function (initialState) {
     let store = initialState || {}
 
     const eventHandlers = {}
 
     const getState = () => cloneDeep(store)
     
-    const getStateAt = (path) => path.reduce((node, key) => node[key], cloneDeep(store))
+    const getStateAt = (path) => path.reduce((node, key) => node[key], getState())
     
-    const trigger = (type) =>
-        Object.values(eventHandlers[type]).forEach(handler => handler({state: getState(), getStateAt}))
+    const trigger = (type) => {
+        if (eventHandlers[type]) {
+            Object.values(eventHandlers[type]).forEach(handler => handler({state: getState()))
+        }
+    }
     
     const update = (type, payload) => {
-        store = cloneDeep(payload)
+        const prevState = getState()
+        const nextState = getState()
+        
+        store = nextState
 
-        Object.values(eventHandlers[type]).forEach(handler => handler({state: getState(), getStateAt}))
+        if (eventHandlers[type]) {
+            Object.values(eventHandlers[type]).forEach(handler => handler({
+                nextState,
+                prevState,
+            }))
+        }
     }
 
     const updateAt = (path, type, payload) => {
@@ -23,7 +34,9 @@ const createStore = function ({ initialState }) {
             throw Error('path must be an array of strings. Path received: ' + path)
         }
 
-        let node = cloneDeep(store)
+        let prevState = getState()
+        let newStore = getState()
+        let node = newStore
         let i = 0
 
         for (i; i < path.length - 1; i += 1) {
@@ -35,13 +48,18 @@ const createStore = function ({ initialState }) {
         }
 
         node[path[i]] = cloneDeep(payload)
+        
+        store = newStore
 
-        Object.values(eventHandlers[type]).forEach(handler => handler({state: getState(), getStateAt}))
+        if (eventHandlers[type]) {
+            Object.values(eventHandlers[type]).forEach(handler => handler({
+                nextState: getState(),
+                prevState,
+            }))
+        }
     }
 
-    const subscribe = (type, handler) => {
-        eventHandlers[type].push(handler)
-
+    const subscribe = function (type, handler) {
         if (!eventHandlers[type]) {
             eventHandlers[type] = {}
         }
@@ -55,6 +73,8 @@ const createStore = function ({ initialState }) {
         eventHandlers[type][key] = handler
 
         this.unsubscribe = () => delete eventHandlers[type][key]
+        
+        return this
     }
 
     return {
