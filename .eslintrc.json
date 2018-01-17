@@ -2,7 +2,8 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "es6": true
+        "es6": true,
+        "jest/globals": true
     },
     "extends": "airbnb-base",
     "parserOptions": {
@@ -10,7 +11,8 @@
         "ecmaVersion": 8
     },
     "plugins": [
-        "import"
+        "import",
+        "jest"
     ],
     "rules": {
         "indent": [
