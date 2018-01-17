@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash.cloneDeep'
+const cloneDeep = require('lodash.clonedeep')
 
 const createStore = function (initialState) {
     let store = initialState || {}
@@ -6,19 +6,19 @@ const createStore = function (initialState) {
     const eventHandlers = {}
 
     const getState = () => cloneDeep(store)
-    
+
     const getStateAt = (path) => path.reduce((node, key) => node[key], getState())
-    
+
     const trigger = (type) => {
         if (eventHandlers[type]) {
-            Object.values(eventHandlers[type]).forEach(handler => handler({state: getState()))
+            Object.values(eventHandlers[type]).forEach(handler => handler({ state: getState() }))
         }
     }
-    
+
     const update = (type, payload) => {
         const prevState = getState()
-        const nextState = getState()
-        
+        const nextState = cloneDeep(payload)
+
         store = nextState
 
         if (eventHandlers[type]) {
@@ -31,24 +31,27 @@ const createStore = function (initialState) {
 
     const updateAt = (path, type, payload) => {
         if (!Array.isArray(path) && path.some(key => typeof key !== 'string')) {
-            throw Error('path must be an array of strings. Path received: ' + path)
+            throw new TypeError(`"path" must be an array of strings. "path" received: ${path}`)
         }
 
-        let prevState = getState()
-        let newStore = getState()
-        let node = newStore
-        let i = 0
+        const prevState = getState()
+        const newStore = getState()
 
-        for (i; i < path.length - 1; i += 1) {
-            if (!hasOwnProperty.call(node, path[i])) {
-                node[path[i]] = {}
+        const lastPathKey = path[path.length - 1]
+        const targetNode = path.reduce((nodePointer, pathKey, i) => {
+            if (!hasOwnProperty.call(nodePointer, pathKey)) {
+                nodePointer[pathKey] = {} // eslint-disable-line no-param-reassign
             }
 
-            node = node[path[i]]
-        }
+            if (i === path.length - 2) {
+                return nodePointer
+            }
 
-        node[path[i]] = cloneDeep(payload)
-        
+            return nodePointer[pathKey]
+        }, newStore)
+
+        targetNode[lastPathKey] = cloneDeep(payload)
+
         store = newStore
 
         if (eventHandlers[type]) {
@@ -73,7 +76,7 @@ const createStore = function (initialState) {
         eventHandlers[type][key] = handler
 
         this.unsubscribe = () => delete eventHandlers[type][key]
-        
+
         return this
     }
 

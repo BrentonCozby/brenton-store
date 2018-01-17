@@ -1,11 +1,11 @@
-import { join } from 'path'
+const { join } = require('path')
 
-export default {
+module.exports = {
     entry: {
-        bundle: [`./${join('src', 'index.js')}`],
+        bundle: [`./${join('index.js')}`],
     },
     output: {
-        filename: `./${join('dist', 'brenton-store.js')}`,
+        filename: `./${join('dist', 'brenton-store.min.js')}`,
         publicPath: '/',
     },
     module: {

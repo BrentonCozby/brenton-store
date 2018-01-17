@@ -6,9 +6,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "webpack -w -d --display minimal",
-    "prod": "webpack -p",
-    "eslint": "eslint -- ./src"
+    "build": "webpack -p",
+    "eslint": "eslint index.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -22,7 +21,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash.clonedeep": "^4.5.0"
   },
   "description": "simple immutable state manager"
 }
