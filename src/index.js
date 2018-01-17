@@ -13,7 +13,7 @@ const createStore = function ({ initialStore }) {
         return cloneDeep(store)
     }
 
-    function update({ eventName, data, path }) {
+    function update({ type, data, path }) {
         let node = cloneDeep(store)
         let i = 0
 
@@ -33,26 +33,26 @@ const createStore = function ({ initialStore }) {
             store = cloneDeep(data)
         }
 
-        Object.values(eventHandlers[eventName]).forEach(handler => handler())
+        Object.values(eventHandlers[type]).forEach(handler => handler())
     }
 
-    function subscribe({ eventName, handler }) {
-        eventHandlers[eventName].push(handler)
+    function subscribe({ type, handler }) {
+        eventHandlers[type].push(handler)
 
-        if (!eventHandlers[eventName]) {
-            eventHandlers[eventName] = {}
+        if (!eventHandlers[type]) {
+            eventHandlers[type] = {}
         }
 
         let key = 0
 
-        while (eventHandlers[eventName][key]) {
+        while (eventHandlers[type][key]) {
             key += 1
         }
 
-        eventHandlers[eventName][key] = handler
+        eventHandlers[type][key] = handler
 
         this.unsubscribe = function () {
-            delete eventHandlers[eventName][key]
+            delete eventHandlers[type][key]
         }
 
         return this
