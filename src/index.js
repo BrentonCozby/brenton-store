@@ -1,4 +1,4 @@
-import { deepClone } from 'lodash'
+import cloneDeep from 'lodash.cloneDeep'
 
 const createStore = function ({ initialStore }) {
     let store = initialStore || {}
@@ -7,14 +7,14 @@ const createStore = function ({ initialStore }) {
 
     function getStore(path) {
         if (path) {
-            return path.reduce((node, key) => node[key], deepClone(store))
+            return path.reduce((node, key) => node[key], cloneDeep(store))
         }
 
-        return deepClone(store)
+        return cloneDeep(store)
     }
 
     function update({ eventName, data, path }) {
-        let node = deepClone(store)
+        let node = cloneDeep(store)
         let i = 0
 
         for (i; i < path.length - 1; i += 1) {
@@ -28,9 +28,9 @@ const createStore = function ({ initialStore }) {
         }
 
         if (path) {
-            node[path[i]] = deepClone(data)
+            node[path[i]] = cloneDeep(data)
         } else {
-            store = deepClone(data)
+            store = cloneDeep(data)
         }
 
         Object.values(eventHandlers[eventName]).forEach(handler => handler())
