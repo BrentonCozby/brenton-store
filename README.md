@@ -8,7 +8,7 @@ Lean, predictable state management. Based on [Flux](https://facebook.github.io/f
 npm install brenton-store
 ```
 
-### API:
+## API:
 ```js
 import createStore from 'brenton-store'
 ```
@@ -24,29 +24,53 @@ const store = createStore(initialState)
 ```js
 store.getState().foo // === { bar: 'baz' }
 ```
+
 ```js
 store.getStateAt(['foo', 'bar']) // === 'baz'
 ```
-```js
-store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-```
-```js
-const ref1 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-const ref2 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-const ref3 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
 
-ref2.unsubscribe() // deletes the eventHandler for ref2
-```
 ```js
-store.emit('EVENT_TYPE') // calls all eventHandlers subscribed to 'EVENT_TYPE'
+store.subscribe('EVENT_TYPE', function (nextState, prevState) {
+    console.log(nextState, prevState)
+})
 ```
+
+```js
+const ref1 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
+    console.log(nextState, prevState)
+})
+const ref2 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
+    console.log(nextState, prevState)
+})
+const ref3 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
+    console.log(nextState, prevState)
+})
+
+// deletes the eventHandler for ref2
+ref2.unsubscribe()
+```
+
+```js
+// calls all eventHandlers subscribed to 'EVENT_TYPE'
+store.emit('EVENT_TYPE')
+```
+
 ```js
 const payloadToReplaceState = { foo: 'foo' }
-store.update('EVENT_TYPE', payloadToReplaceState) // calls all eventHandlers subscribed to 'EVENT_TYPE'
+
+// calls all eventHandlers subscribed to 'EVENT_TYPE'
+// and replaces state with payload
+store.update('EVENT_TYPE', payloadToReplaceState)
+
 store.getState() // === { foo: 'foo' }
 ```
+
 ```js
 const payloadToReplaceValueAtEndOfPath = ['sandwich']
-store.updateAt(['foo'], 'EVENT_TYPE', payloadToReplaceValueAtEndOfPath) // calls all eventHandlers subscribed to 'EVENT_TYPE'
+
+// calls all eventHandlers subscribed to 'EVENT_TYPE'
+// and replaces state.foo with payload
+store.updateAt(['foo'], 'EVENT_TYPE', payloadToReplaceValueAtEndOfPath)
+
 store.getState() // === { foo: ['sandwich'] }
 ```
