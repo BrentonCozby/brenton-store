@@ -13,7 +13,7 @@ npm install brenton-store
 import createStore from 'brenton-store'
 ```
 ```js
-const initalState = {
+const initialState = {
     foo: {
         bar: 'baz'
     }
