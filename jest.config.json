@@ -1,9 +1,8 @@
 {
-  "testMatch": ["<rootDir>/tests/*.js"],
-  "setupFiles": ["<rootDir>/tests/setup.js"],
-  "transform": {".*": "<rootDir>/node_modules/babel-jest"},
-  "moduleFileExtensions": ["js"],
+  "collectCoverage": true,
   "collectCoverageFrom": [
-    "./index.js"
-  ]
+    "**/src/**/*.js",
+    "!**/node_modules/**"
+  ],
+  "coverageReporters": ["lcov", "json"]
 }

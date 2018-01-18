@@ -1,25 +1,45 @@
 const cloneDeep = require('lodash.clonedeep')
 
+const isArray = (arg) => Object.prototype.toString.call(arg) === '[object Array]'
+
 const createStore = function (initialState) {
-    let store = initialState || {}
+    let state = initialState || {}
 
     const eventHandlers = {}
 
-    const getState = () => cloneDeep(store)
+    const getState = () => cloneDeep(state)
 
-    const getStateAt = (path) => path.reduce((node, key) => node[key], getState())
+    const getStateAt = (path) => {
+        if (typeof path !== 'object' ||
+            !isArray(path) ||
+            path.length === 0 ||
+            path.some(key => typeof key !== 'string')
+        ) {
+            throw new TypeError(`"path" must be a non-empty array of strings. "path" received: ${String(path)}`)
+        }
 
-    const trigger = (type) => {
+        return path.reduce((node, key) => node[key], getState())
+    }
+
+    const emit = (type) => {
+        if (typeof type !== 'string') {
+            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
+        }
+
         if (eventHandlers[type]) {
             Object.values(eventHandlers[type]).forEach(handler => handler({ state: getState() }))
         }
     }
 
     const update = (type, payload) => {
+        if (typeof type !== 'string') {
+            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
+        }
+
         const prevState = getState()
         const nextState = cloneDeep(payload)
 
-        store = nextState
+        state = nextState
 
         if (eventHandlers[type]) {
             Object.values(eventHandlers[type]).forEach(handler => handler({
@@ -30,12 +50,20 @@ const createStore = function (initialState) {
     }
 
     const updateAt = (path, type, payload) => {
-        if (!Array.isArray(path) && path.some(key => typeof key !== 'string')) {
-            throw new TypeError(`"path" must be an array of strings. "path" received: ${path}`)
+        if (typeof path !== 'object' ||
+            !isArray(path) ||
+            path.length === 0 ||
+            path.some(key => typeof key !== 'string')
+        ) {
+            throw new TypeError(`"path" must be a non-empty array of strings. "path" received: ${String(path)}`)
+        }
+
+        if (typeof type !== 'string') {
+            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
         }
 
         const prevState = getState()
-        const newStore = getState()
+        const newState = getState()
 
         const lastPathKey = path[path.length - 1]
         const targetNode = path.reduce((nodePointer, pathKey, i) => {
@@ -43,16 +71,16 @@ const createStore = function (initialState) {
                 nodePointer[pathKey] = {} // eslint-disable-line no-param-reassign
             }
 
-            if (i === path.length - 2) {
+            if (i === path.length - 1) {
                 return nodePointer
             }
 
             return nodePointer[pathKey]
-        }, newStore)
+        }, newState)
 
         targetNode[lastPathKey] = cloneDeep(payload)
 
-        store = newStore
+        state = newState
 
         if (eventHandlers[type]) {
             Object.values(eventHandlers[type]).forEach(handler => handler({
@@ -63,6 +91,14 @@ const createStore = function (initialState) {
     }
 
     const subscribe = function (type, handler) {
+        if (typeof type !== 'string') {
+            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
+        }
+
+        if (typeof handler !== 'function') {
+            throw new TypeError(`"handler" must be a function. "handler" received: ${String(handler)}`)
+        }
+
         if (!eventHandlers[type]) {
             eventHandlers[type] = {}
         }
@@ -83,7 +119,7 @@ const createStore = function (initialState) {
     return {
         getState,
         getStateAt,
-        trigger,
+        emit,
         update,
         updateAt,
         subscribe,
