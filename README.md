@@ -41,10 +41,12 @@ ref2.unsubscribe() // deletes the eventHandler for ref2
 store.emit('EVENT_TYPE') // calls all eventHandlers subscribed to 'EVENT_TYPE'
 ```
 ```js
-store.update('EVENT_TYPE', { foo: 'foo' }) // calls all eventHandlers subscribed to 'EVENT_TYPE'
+const payloadToReplaceState = { foo: 'foo' }
+store.update('EVENT_TYPE', payloadToReplaceState) // calls all eventHandlers subscribed to 'EVENT_TYPE'
 store.getState() // === { foo: 'foo' }
 ```
 ```js
-store.updateAt(['foo'], 'EVENT_TYPE', ['sandwich']) // calls all eventHandlers subscribed to 'EVENT_TYPE'
+const payloadToReplaceValueAtEndOfPath = ['sandwich']
+store.updateAt(['foo'], 'EVENT_TYPE', payloadToReplaceValueAtEndOfPath) // calls all eventHandlers subscribed to 'EVENT_TYPE'
 store.getState() // === { foo: ['sandwich'] }
 ```
