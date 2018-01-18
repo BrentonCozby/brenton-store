@@ -28,6 +28,16 @@ store.getState().foo // === { bar: 'baz' }
 store.getStateAt(['foo', 'bar']) // === 'baz'
 ```
 ```js
+store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
+```
+```js
+const ref1 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
+const ref2 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
+const ref3 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
+
+ref2.unsubscribe() // deletes the eventHandler for ref2
+```
+```js
 store.emit('EVENT_TYPE') // calls all eventHandlers subscribed to 'EVENT_TYPE'
 ```
 ```js
@@ -37,14 +47,4 @@ store.getState() // === { foo: 'foo' }
 ```js
 store.updateAt(['foo'], 'EVENT_TYPE', ['sandwich']) // calls all eventHandlers subscribed to 'EVENT_TYPE'
 store.getState() // === { foo: ['sandwich'] }
-```
-```js
-store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-```
-```js
-const ref1 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-const ref2 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-const ref3 = store.subscribe('EVENT_TYPE', function eventHandler(nextState, prevState) {})
-
-ref2.unsubscribe() // deletes the eventHandler for ref2
 ```
