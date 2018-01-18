@@ -1,6 +1,6 @@
 {
   "name": "brenton-store",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "dist/brenton-store.js",
   "author": "Brenton Cozby",
   "license": "MIT",
