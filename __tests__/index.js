@@ -26,14 +26,26 @@ describe('createStore', () => {
 })
 
 describe('getState', () => {
-    test('returns a deeply-cloned copy of the internal state object', () => {
-        const store = createStore(initalState)
+    let store
 
+    beforeEach(() => {
+        store = createStore(initalState)
+    })
+
+    test('returns a deeply-cloned copy of the internal state object', () => {
         const state1 = store.getState()
         const state2 = store.getState()
 
         expect(state1).toEqual(state2)
         expect(state1).not.toBe(state2)
+    })
+
+    test('throws an error if any arguments are passed in', () => {
+        const args = ['foo', 'bar']
+
+        const errorMessage = `getState does not use any arguments you pass to it. Arguments passed: ${JSON.stringify(args)}`
+
+        expect(() => store.getState(...args)).toThrow(new Error(errorMessage))
     })
 })
 

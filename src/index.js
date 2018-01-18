@@ -27,7 +27,13 @@ const createStore = function (initialState) {
 
     const eventHandlers = {}
 
-    const getState = () => cloneDeep(state)
+    const getState = (...args) => {
+        if (args.length > 0) {
+            throw new Error(`getState does not use any arguments you pass to it. Arguments passed: ${JSON.stringify(args)}`) // eslint-disable-line prefer-rest-params
+        }
+
+        return cloneDeep(state)
+    }
 
     const getStateAt = (path) => {
         validateParamArrayOfStrings({ name: 'path', value: path })

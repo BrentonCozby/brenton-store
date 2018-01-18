@@ -2,7 +2,7 @@ const { join } = require('path')
 
 module.exports = {
     entry: {
-        bundle: [`./${join('index.js')}`],
+        bundle: [`./${join('src', 'index.js')}`],
     },
     output: {
         filename: `./${join('dist', 'brenton-store.min.js')}`,
