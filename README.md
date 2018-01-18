@@ -8,10 +8,13 @@ Lean, predictable state management. Based on [Flux](https://facebook.github.io/f
 npm install brenton-store
 ```
 
-## API:
+# API:
+
 ```js
 import createStore from 'brenton-store'
 ```
+
+#### createStore( [initialState] )
 ```js
 const initialState = {
     foo: {
@@ -21,20 +24,25 @@ const initialState = {
 
 const store = createStore(initialState)
 ```
+
+#### store.getState()
 ```js
 store.getState().foo // === { bar: 'baz' }
 ```
 
+#### store.getStateAt(path);
 ```js
 store.getStateAt(['foo', 'bar']) // === 'baz'
 ```
 
+#### store.subscribe(type, handler)
 ```js
 store.subscribe('EVENT_TYPE', (nextState, prevState) => {
     console.log(nextState, prevState)
 })
 ```
 
+#### subscribeReference.unsubscribe()
 ```js
 const ref1 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
     console.log(nextState, prevState)
@@ -50,11 +58,13 @@ const ref3 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
 ref2.unsubscribe()
 ```
 
+#### store.emit(type)
 ```js
 // calls all eventHandlers subscribed to 'EVENT_TYPE'
 store.emit('EVENT_TYPE')
 ```
 
+#### store.update(type, payload)
 ```js
 const payloadToReplaceState = { foo: 'foo' }
 
@@ -65,6 +75,7 @@ store.update('EVENT_TYPE', payloadToReplaceState)
 store.getState() // === { foo: 'foo' }
 ```
 
+#### store.updateAt(path, type, payload)
 ```js
 const payloadToReplaceValueAtEndOfPath = ['sandwich']
 
