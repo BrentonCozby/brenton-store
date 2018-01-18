@@ -11,28 +11,28 @@ Lean, immutable state management.
 ```js
 import createStore from 'brenton-store'
 ```
-```
+```js
 const store = createStore()
 ```
-```
+```js
 store.getState()
 ```
-```
+```js
 store.getStateAt(['path', 'in', 'your', 'state'])
 ```
-```
+```js
 store.emit('EVENT_TYPE')
 ```
-```
+```js
 store.update('EVENT_TYPE', payloadToReplaceState)
 ```
-```
+```js
 store.updateAt(['path', 'in', 'your', 'state'], 'EVENT_TYPE', payloadForEndOfPath)
 ```
-```
+```js
 store.subscribe('EVENT_TYPE', function eventHandler() {})
 ```
-```
+```js
 const ref1 = store.subscribe('EVENT_TYPE', function eventHandler() {})
 const ref2 = store.subscribe('EVENT_TYPE', function eventHandler() {})
 const ref3 = store.subscribe('EVENT_TYPE', function eventHandler() {})
