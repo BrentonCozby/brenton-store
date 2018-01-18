@@ -27,7 +27,7 @@ const createStore = function (initialState) {
         }
 
         if (eventHandlers[type]) {
-            Object.values(eventHandlers[type]).forEach(handler => handler({ state: getState() }))
+            Object.values(eventHandlers[type]).forEach(handler => handler(getState(), getState()))
         }
     }
 
@@ -42,10 +42,7 @@ const createStore = function (initialState) {
         state = nextState
 
         if (eventHandlers[type]) {
-            Object.values(eventHandlers[type]).forEach(handler => handler({
-                nextState,
-                prevState,
-            }))
+            Object.values(eventHandlers[type]).forEach(handler => handler(nextState, prevState))
         }
     }
 
@@ -83,10 +80,7 @@ const createStore = function (initialState) {
         state = newState
 
         if (eventHandlers[type]) {
-            Object.values(eventHandlers[type]).forEach(handler => handler({
-                nextState: getState(),
-                prevState,
-            }))
+            Object.values(eventHandlers[type]).forEach(handler => handler(getState(), prevState))
         }
     }
 

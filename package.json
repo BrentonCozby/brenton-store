@@ -8,8 +8,8 @@
   "scripts": {
     "build": "webpack -p",
     "eslint": "eslint index.js",
-    "test": "jest --config ./jest.config.json --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "test:w": "yarn test --watch",
+    "test": "jest --config ./jest.config.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test:w": "jest --config ./jest.config.json --watch",
     "coverage": "open ./coverage/lcov-report/index.html"
   },
   "devDependencies": {

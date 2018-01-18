@@ -75,7 +75,7 @@ describe('emit', () => {
     test('calls the event handler(s) associated the the emitted event', () => {
         store.emit('SOME_EVENT')
 
-        expect(someEventHandler).toHaveBeenCalledWith({ state: store.getState() })
+        expect(someEventHandler).toHaveBeenCalledWith(store.getState(), store.getState())
     })
 
     test('throws a TypeError if the type argument is not a string', () => {
@@ -130,10 +130,7 @@ describe('update', () => {
     test('calls any event handlers subscribed to the type argument', () => {
         store.update('SOME_EVENT', {})
 
-        expect(someEventHandler).toHaveBeenCalledWith({
-            nextState: store.getState(),
-            prevState: initalState,
-        })
+        expect(someEventHandler).toHaveBeenCalledWith(store.getState(), initalState)
     })
 
     test('does not call any event handlers if there are none for the type argument', () => {
@@ -197,10 +194,7 @@ describe('updateAt', () => {
     test('calls any event handlers subscribed to the type argument', () => {
         store.updateAt(['foo', 'a', 'b'], 'UPDATE_B', ['sandwich'])
 
-        expect(someEventHandler).toHaveBeenCalledWith({
-            nextState: store.getState(),
-            prevState: initalState,
-        })
+        expect(someEventHandler).toHaveBeenCalledWith(store.getState(), initalState)
     })
 
     test('does not call any event handlers if there are none for the type argument', () => {
