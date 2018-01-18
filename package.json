@@ -29,5 +29,5 @@
   "dependencies": {
     "lodash.clonedeep": "^4.5.0"
   },
-  "description": "simple immutable state manager"
+  "description": "Lean, predictable state management. Based on Flux, specifically the Redux implementation."
 }
