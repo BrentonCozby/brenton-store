@@ -30,7 +30,7 @@ store.getStateAt(['foo', 'bar']) // === 'baz'
 ```
 
 ```js
-store.subscribe('EVENT_TYPE', function (nextState, prevState) {
+store.subscribe('EVENT_TYPE', (nextState, prevState) => {
     console.log(nextState, prevState)
 })
 ```
