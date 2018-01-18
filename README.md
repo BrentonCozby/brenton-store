@@ -4,8 +4,9 @@
 
 Lean, immutable state management.
 
-### INSTALL:
-```npm install brenton-store```
+```bash
+npm install brenton-store
+```
 
 ### API:
 ```js
