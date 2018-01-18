@@ -1,6 +1,26 @@
 const cloneDeep = require('lodash.clonedeep')
 
-const isArray = (arg) => Object.prototype.toString.call(arg) === '[object Array]'
+const validateParamString = ({ name, value }) => {
+    if (typeof value !== 'string') {
+        throw new TypeError(`"${name}" must be a string. "${name}" received: ${String(value)}`)
+    }
+}
+
+const validateParamFunction = ({ name, value }) => {
+    if (typeof value !== 'function') {
+        throw new TypeError(`"${name}" must be a function. "${name}" received: ${String(value)}`)
+    }
+}
+
+const validateParamArrayOfStrings = ({ name, value }) => {
+    if (typeof value !== 'object' ||
+        Object.prototype.toString.call(value) !== '[object Array]' ||
+        value.length === 0 ||
+        value.some(key => typeof key !== 'string')
+    ) {
+        throw new TypeError(`"${name}" must be a non-empty array of strings. "${name}" received: ${String(value)}`)
+    }
+}
 
 const createStore = function (initialState) {
     let state = initialState || {}
@@ -10,21 +30,13 @@ const createStore = function (initialState) {
     const getState = () => cloneDeep(state)
 
     const getStateAt = (path) => {
-        if (typeof path !== 'object' ||
-            !isArray(path) ||
-            path.length === 0 ||
-            path.some(key => typeof key !== 'string')
-        ) {
-            throw new TypeError(`"path" must be a non-empty array of strings. "path" received: ${String(path)}`)
-        }
+        validateParamArrayOfStrings({ name: 'path', value: path })
 
         return path.reduce((node, key) => node[key], getState())
     }
 
     const emit = (type) => {
-        if (typeof type !== 'string') {
-            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
-        }
+        validateParamString({ name: 'type', value: type })
 
         if (eventHandlers[type]) {
             Object.values(eventHandlers[type]).forEach(handler => handler(getState(), getState()))
@@ -32,9 +44,7 @@ const createStore = function (initialState) {
     }
 
     const update = (type, payload) => {
-        if (typeof type !== 'string') {
-            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
-        }
+        validateParamString({ name: 'type', value: type })
 
         const prevState = getState()
         const nextState = cloneDeep(payload)
@@ -47,17 +57,8 @@ const createStore = function (initialState) {
     }
 
     const updateAt = (path, type, payload) => {
-        if (typeof path !== 'object' ||
-            !isArray(path) ||
-            path.length === 0 ||
-            path.some(key => typeof key !== 'string')
-        ) {
-            throw new TypeError(`"path" must be a non-empty array of strings. "path" received: ${String(path)}`)
-        }
-
-        if (typeof type !== 'string') {
-            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
-        }
+        validateParamArrayOfStrings({ name: 'path', value: path })
+        validateParamString({ name: 'type', value: type })
 
         const prevState = getState()
         const newState = getState()
@@ -85,13 +86,8 @@ const createStore = function (initialState) {
     }
 
     const subscribe = function (type, handler) {
-        if (typeof type !== 'string') {
-            throw new TypeError(`"type" must be a string. "type" received: ${String(type)}`)
-        }
-
-        if (typeof handler !== 'function') {
-            throw new TypeError(`"handler" must be a function. "handler" received: ${String(handler)}`)
-        }
+        validateParamString({ name: 'type', value: type })
+        validateParamFunction({ name: 'handler', value: handler })
 
         if (!eventHandlers[type]) {
             eventHandlers[type] = {}
