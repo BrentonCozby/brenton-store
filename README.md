@@ -21,10 +21,10 @@ const initalState = {
 const store = createStore(initialState)
 ```
 ```js
-store.getState().foo.bar // === 'baz'
+store.getState().foo // === { bar: 'baz' }
 ```
 ```js
-store.getStateAt(['foo']) // === { bar: 'baz' }
+store.getStateAt(['foo', 'bar']) // === 'baz'
 ```
 ```js
 store.emit('EVENT_TYPE') // calls all eventHandlers subscribed to 'EVENT_TYPE'
