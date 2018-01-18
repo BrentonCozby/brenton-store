@@ -8,14 +8,30 @@ Lean, immutable state management.
 ```npm install brenton-store```
 
 ### API:
-```import createStore from 'brenton-store'```
-```const store = createStore()```
-```store.getState()```
-```store.getStateAt(['path', 'in', 'your', 'state'])```
-```store.emit('EVENT_TYPE')```
-```store.update('EVENT_TYPE', payloadToReplaceState)```
-```store.updateAt(['path', 'in', 'your', 'state'], 'EVENT_TYPE', payloadForEndOfPath)```
-```store.subscribe('EVENT_TYPE', function eventHandler() {})```
+```js
+import createStore from 'brenton-store'
+```
+```
+const store = createStore()
+```
+```
+store.getState()
+```
+```
+store.getStateAt(['path', 'in', 'your', 'state'])
+```
+```
+store.emit('EVENT_TYPE')
+```
+```
+store.update('EVENT_TYPE', payloadToReplaceState)
+```
+```
+store.updateAt(['path', 'in', 'your', 'state'], 'EVENT_TYPE', payloadForEndOfPath)
+```
+```
+store.subscribe('EVENT_TYPE', function eventHandler() {})
+```
 ```
 const ref1 = store.subscribe('EVENT_TYPE', function eventHandler() {})
 const ref2 = store.subscribe('EVENT_TYPE', function eventHandler() {})
