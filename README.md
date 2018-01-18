@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/BrentonCozby/brenton-store.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BrentonCozby/brenton-store)
 [![Coverage Status](https://coveralls.io/repos/github/BrentonCozby/brenton-store/badge.svg?branch=master)](https://coveralls.io/github/BrentonCozby/brenton-store?branch=master)
 
-Lean, immutable state management.
+Lean, predictable state management. Based on [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content), specifically the [Redux](https://redux.js.org/) implementation.
 
 ```bash
 npm install brenton-store
