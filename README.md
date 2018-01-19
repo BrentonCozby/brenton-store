@@ -30,11 +30,6 @@ const store = createStore(initialState)
 store.getState().foo // === { bar: 'baz' }
 ```
 
-#### store.getStateAt(path);
-```js
-store.getStateAt(['foo', 'bar']) // === 'baz'
-```
-
 #### store.subscribe(type, handler)
 ```js
 store.subscribe('EVENT_TYPE', (nextState, prevState) => {
@@ -50,9 +45,6 @@ const ref1 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
 const ref2 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
     console.log(nextState, prevState)
 })
-const ref3 = store.subscribe('EVENT_TYPE', (nextState, prevState) => {
-    console.log(nextState, prevState)
-})
 
 // deletes the eventHandler for ref2
 ref2.unsubscribe()
@@ -64,24 +56,24 @@ ref2.unsubscribe()
 store.emit('EVENT_TYPE')
 ```
 
-#### store.update(type, payload)
+#### store.setState(type, payload)
 ```js
 const payloadToReplaceState = { foo: 'foo' }
 
 // calls all eventHandlers subscribed to 'EVENT_TYPE'
 // and replaces state with payload
-store.update('EVENT_TYPE', payloadToReplaceState)
+store.setState('EVENT_TYPE', payloadToReplaceState)
 
 store.getState() // === { foo: 'foo' }
 ```
 
-#### store.updateAt(path, type, payload)
+#### store.setStateAt(path, type, payload)
 ```js
 const payloadToReplaceValueAtEndOfPath = ['sandwich']
 
 // calls all eventHandlers subscribed to 'EVENT_TYPE'
 // and replaces state.foo with payload
-store.updateAt(['foo'], 'EVENT_TYPE', payloadToReplaceValueAtEndOfPath)
+store.setStateAt(['foo'], 'EVENT_TYPE', payloadToReplaceValueAtEndOfPath)
 
 store.getState() // === { foo: ['sandwich'] }
 ```

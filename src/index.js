@@ -35,12 +35,6 @@ const createStore = function (initialState) {
         return cloneDeep(state)
     }
 
-    const getStateAt = (path) => {
-        validateParamArrayOfStrings({ name: 'path', value: path })
-
-        return path.reduce((node, key) => node[key], getState())
-    }
-
     const emit = (type) => {
         validateParamString({ name: 'type', value: type })
 
@@ -49,7 +43,7 @@ const createStore = function (initialState) {
         }
     }
 
-    const update = (type, payload) => {
+    const setState = (type, payload) => {
         validateParamString({ name: 'type', value: type })
 
         const prevState = getState()
@@ -62,7 +56,7 @@ const createStore = function (initialState) {
         }
     }
 
-    const updateAt = (path, type, payload) => {
+    const setStateAt = (path, type, payload) => {
         validateParamArrayOfStrings({ name: 'path', value: path })
         validateParamString({ name: 'type', value: type })
 
@@ -114,10 +108,9 @@ const createStore = function (initialState) {
 
     return {
         getState,
-        getStateAt,
         emit,
-        update,
-        updateAt,
+        setState,
+        setStateAt,
         subscribe,
     }
 }

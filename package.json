@@ -1,5 +1,6 @@
 {
   "name": "brenton-store",
+  "description": "Lean, predictable state management. Based on Flux, specifically the Redux implementation.",
   "version": "1.1.3",
   "main": "dist/brenton-store.js",
   "author": "Brenton Cozby",
@@ -28,6 +29,5 @@
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0"
-  },
-  "description": "Lean, predictable state management. Based on Flux, specifically the Redux implementation."
+  }
 }

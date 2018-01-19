@@ -49,29 +49,6 @@ describe('getState', () => {
     })
 })
 
-describe('getStateAt', () => {
-    let store
-
-    beforeEach(() => {
-        store = createStore(initalState)
-    })
-
-    test('returns a copy of the value from the state at the end of the path argument', () => {
-        const a = store.getStateAt(['foo', 'a'])
-
-        expect(a).toEqual({ b: 'b' })
-        expect(a).not.toBe(initalState.foo.a)
-    })
-
-    test('throws a TypeError if path is not an array of strings ()', () => {
-        [undefined, null, true, 2, 'two', () => {}, {}, [], [1, 2], [{}], Symbol('symbol'), new Map(), new Set()].forEach(path => {
-            const errorMessage = `"path" must be a non-empty array of strings. "path" received: ${String(path)}`
-
-            expect(() => store.getStateAt(path)).toThrow(new TypeError(errorMessage))
-        })
-    })
-})
-
 describe('emit', () => {
     let store
     let someEventHandler
@@ -105,7 +82,7 @@ describe('emit', () => {
     })
 })
 
-describe('update', () => {
+describe('setState', () => {
     let store
     let someEventHandler
 
@@ -121,14 +98,14 @@ describe('update', () => {
         [undefined, true, () => {}, {}, 2, Symbol('symbol')].forEach((type) => {
             const errorMessage = `"type" must be a string. "type" received: ${String(type)}`
 
-            expect(() => store.update(type, {})).toThrow(new TypeError(errorMessage))
+            expect(() => store.setState(type, {})).toThrow(new TypeError(errorMessage))
         })
     })
 
     test('reassigns the interal state object to be a copy of the payload argument', () => {
         expect(store.getState()).toEqual(initalState)
 
-        store.update('UPDATE_STATE', {
+        store.setState('UPDATE_STATE', {
             ...store.getState(),
             baz: [1, 2, 3, 4],
         })
@@ -140,19 +117,19 @@ describe('update', () => {
     })
 
     test('calls any event handlers subscribed to the type argument', () => {
-        store.update('SOME_EVENT', {})
+        store.setState('SOME_EVENT', {})
 
         expect(someEventHandler).toHaveBeenCalledWith(store.getState(), initalState)
     })
 
     test('does not call any event handlers if there are none for the type argument', () => {
-        store.update('FOO_EVENT', {})
+        store.setState('FOO_EVENT', {})
 
         expect(someEventHandler).not.toHaveBeenCalled()
     })
 })
 
-describe('updateAt', () => {
+describe('setStateAt', () => {
     let store
     let someEventHandler
 
@@ -161,14 +138,14 @@ describe('updateAt', () => {
 
         someEventHandler = jest.fn()
 
-        store.subscribe('UPDATE_B', someEventHandler)
+        store.subscribe('SET_B', someEventHandler)
     })
 
     test('throws a TypeError if path is not an array of strings ()', () => {
         [undefined, null, true, 2, 'two', () => {}, {}, [], [1, 2], [{}], Symbol('symbol'), new Map(), new Set()].forEach(path => {
             const errorMessage = `"path" must be a non-empty array of strings. "path" received: ${String(path)}`
 
-            expect(() => store.updateAt(path, 'UPDATE_B', ['sandwich'])).toThrow(new TypeError(errorMessage))
+            expect(() => store.setStateAt(path, 'SET_B', ['sandwich'])).toThrow(new TypeError(errorMessage))
         })
     })
 
@@ -176,41 +153,41 @@ describe('updateAt', () => {
         [undefined, true, () => {}, {}, 2, Symbol('symbol')].forEach((type) => {
             const errorMessage = `"type" must be a string. "type" received: ${String(type)}`
 
-            expect(() => store.updateAt(['foo', 'a', 'b'], type, ['sandwich'])).toThrow(new TypeError(errorMessage))
+            expect(() => store.setStateAt(['foo', 'a', 'b'], type, ['sandwich'])).toThrow(new TypeError(errorMessage))
         })
     })
 
-    test('updates the value at the end of the path with a copy of the payload', () => {
+    test('sets the value at the end of the path in state with a copy of the payload', () => {
         expect(store.getState()).toEqual(initalState)
 
         const payload = ['sandwich']
 
-        store.updateAt(['foo', 'a', 'b'], 'UPDATE_B', payload)
+        store.setStateAt(['foo', 'a', 'b'], 'SET_B', payload)
 
         expect(store.getState().foo.a.b).toEqual(payload)
         expect(store.getState().foo.a.b).not.toBe(payload)
     })
 
-    test('updates the value and the end of the path and creates objects for any missing keys in the path', () => {
+    test('sets the value and the end of the path in state and creates objects for any missing keys in the path', () => {
         store = createStore({ bar: { c: 'c' } })
 
         expect(store.getState()).toEqual({ bar: { c: 'c' } })
 
         const payload = ['sandwich']
 
-        store.updateAt(['bar', 'a', 'b'], 'UPDATE_B', payload)
+        store.setStateAt(['bar', 'a', 'b'], 'SET_B', payload)
 
         expect(store.getState().bar.a).toEqual({ b: payload })
     })
 
     test('calls any event handlers subscribed to the type argument', () => {
-        store.updateAt(['foo', 'a', 'b'], 'UPDATE_B', ['sandwich'])
+        store.setStateAt(['foo', 'a', 'b'], 'SET_B', ['sandwich'])
 
         expect(someEventHandler).toHaveBeenCalledWith(store.getState(), initalState)
     })
 
     test('does not call any event handlers if there are none for the type argument', () => {
-        store.updateAt(['foo', 'a', 'b'], 'FOO_EVENT', ['sandwich'])
+        store.setStateAt(['foo', 'a', 'b'], 'FOO_EVENT', ['sandwich'])
 
         expect(someEventHandler).not.toHaveBeenCalled()
     })
