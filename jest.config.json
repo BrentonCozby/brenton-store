@@ -4,5 +4,8 @@
     "**/src/**/*.js",
     "!**/node_modules/**"
   ],
-  "coverageReporters": ["lcov", "json"]
+  "coverageReporters": ["lcov", "json"],
+  "moduleNameMapper": {
+    "^src(.*)$": "<rootDir>/src"
+  }
 }

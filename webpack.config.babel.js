@@ -1,11 +1,11 @@
-import { resolve } from 'path'
+import path from 'path'
 
 export const entry = {
-  bundle: resolve(__dirname, 'src', 'index.js'),
+  bundle: path.resolve(__dirname, 'src', 'index.js'),
 }
 
 export const output = {
-  path: resolve(__dirname, 'dist'),
+  path: path.resolve(__dirname, 'dist'),
   filename: 'brenton-store.min.js',
 }
 
@@ -15,4 +15,10 @@ export const module = {
     exclude: /(node_modules)/,
     use: ['babel-loader'],
   }],
+}
+
+export const resolve = {
+  alias: {
+    src: path.resolve(__dirname, 'src'),
+  },
 }

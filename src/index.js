@@ -1,38 +1,16 @@
-const validateParamString = ({ name, value }) => {
-  if (typeof value !== 'string') {
-    throw new TypeError(`"${name}" must be a string. "${name}" received: ${String(value)}`)
-  }
-}
-
-const validateParamFunction = ({ name, value }) => {
-  if (typeof value !== 'function') {
-    throw new TypeError(`"${name}" must be a function. "${name}" received: ${String(value)}`)
-  }
-}
-
-const validateParamArrayOfStrings = ({ name, value }) => {
-  if (
-    typeof value !== 'object' ||
-    Object.prototype.toString.call(value) !== '[object Array]' ||
-    value.length === 0 ||
-    value.some(key => typeof key !== 'string')
-  ) {
-    throw new TypeError(`"${name}" must be a non-empty array of strings. "${name}" received: ${String(value)}`)
-  }
-}
+import cloneDeep from 'lodash.clonedeep'
+import {
+  validateParamString,
+  validateParamFunction,
+  validateParamArrayOfStrings,
+} from './util/validation'
 
 const createStore = function (initialState) {
   let state = initialState || {}
 
   const eventHandlers = {}
 
-  const getState = (...args) => {
-    if (args.length > 0) {
-      throw new Error(`getState does not use any arguments you pass to it. Arguments passed: ${JSON.stringify(args)}`) // eslint-disable-line prefer-rest-params
-    }
-
-    return state
-  }
+  const getState = () => cloneDeep(state)
 
   const emit = (type) => {
     validateParamString({ name: 'type', value: type })

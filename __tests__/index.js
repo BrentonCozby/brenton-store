@@ -39,14 +39,6 @@ describe('getState', () => {
         expect(state1).toEqual(state2)
         expect(state1).not.toBe(state2)
     })
-
-    test('throws an error if any arguments are passed in', () => {
-        const args = ['foo', 'bar']
-
-        const errorMessage = `getState does not use any arguments you pass to it. Arguments passed: ${JSON.stringify(args)}`
-
-        expect(() => store.getState(...args)).toThrow(new Error(errorMessage))
-    })
 })
 
 describe('emit', () => {
@@ -229,7 +221,7 @@ describe('subscribe', () => {
         expect(handler2).toHaveBeenCalled()
     })
 
-    test('returns a reference to the subscriber function with an unsubsribe method', () => {
+    test('returns a reference to the subscriber function with an unsubscribe method', () => {
         const handler1 = jest.fn()
 
         const subscribeRef = store.subscribe('SOME_EVENT', handler1)
